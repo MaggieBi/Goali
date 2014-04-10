@@ -26,8 +26,10 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 #LOGIN URL
-LOGIN_URL = '/homepage'
+LOGIN_URL = ''
 
+#LOGIN REDIRECT URL
+LOGIN_REDIRECT_URL = '/accounts/home'
 
 # Application definition
 
@@ -48,8 +50,6 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
-#    'django.contrib.sessions.middleware.SessionMiddleware',
-#    'django.middleware.common.CommonMiddleware',
 #    'django.middleware.csrf.CsrfViewMiddleware',
 #    'django.contrib.messages.middleware.MessageMiddleware',
 #    'django.middleware.clickjacking.XFrameOptionsMiddleware',

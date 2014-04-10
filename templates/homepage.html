@@ -36,66 +36,52 @@
 	<div class="site-wrapper">
 		<nav class="navbar navbar-fixed-top" role="navigation">
 			<div class="container">
+
 				<a href="#"><img src="http://i1372.photobucket.com/albums/ag359/ybi2450/G-logo_47a938_zps22b74e95.png" border="0" alt=" photo G-logo_47a938_zps22b74e95.png" id="home-logo"/></a>
+
 				<a href="#signin-form" class="pure-button" id="signin-button" rel="signin-form">Sign In</a>
 			</div>
 		</nav>
 
 		<div class="site-wrapper-inner">
 			<div class="cover-container">
-
-
-
-	<div id="home-container">
-	<div id="intro" class="inner cover">
-				<h1 class="cover-heading">Welcome to Goali</h1>
-				<p class="intro">Goali is an online service to help you keep track of your goals and aspirations.</p>
-				<p class="intro">
-				  <a href="#" class="pure-button pure-button-primary">Learn more</a>
-				</p>
-			  </div>
-
-		<div id="formwrapper">
-		
-		<form class="pure-form pure-form-stacked" action="" method="post">
-			{% csrf_token %}
-			<p>New to Goali?</p>
-			{% bootstrap_form form %}
-			<input class="pure-button pure-input-1 pure-button-primary" type="submit" value="Sign Up for Goali Now!"/>
-			<p><a id="signintext" href="#signin-form" rel="signin-form">Or Sign In Here</a></p>
-			<input type="hidden" name="next" value="{{ next|escape }}" />
-		</form>
-
-
-    <!-- Signin form-->
-    <form class="pure-form pure-form-stacked" action="" method="post" id="signin-form">
-      <p>Sign In Here</p>
-      <a href="#" class="modal_close"><img src="http://i1372.photobucket.com/albums/ag359/ybi2450/close-button_zpsa1665392.png" border="0" alt=" photo close-button_zpsa1665392.png"/></a>
-      <fieldset>
-      <input type="email" class="pure-input-1" name="email" placeholder="Username Or Email" value="" id="email-signin">
-      <input type="password" class="pure-input-1" name="password" placeholder="Password" value="" id="password-signin">
-      </fieldset>
-      <input class="pure-button pure-input-1 pure-button-primary" type="submit" value="Submit"/>
-    </form>
-
-		
-	</div>
-
-	</div>
-
-				  <div class="mastfoot">
-				<div class="inner">
-				  <ul id="nav-bottom">
+				<div id="home-container">
+					<div id="intro" class="inner cover">
+						<h1 class="cover-heading">Welcome to Goali</h1>
+						<p class="intro">Goali is an online service to help you keep track of your goals and aspirations.</p>
+						<p class="intro"><a href="#" class="pure-button pure-button-primary">Learn more</a></p>
+					</div>
+				<div id="formwrapper">
+					<!-- Registration form-->
+					<form class="pure-form pure-form-stacked" action="" method="post">
+						{% csrf_token %}
+						<p>New to Goali?</p>
+						{% bootstrap_form registerform %}
+						<input class="pure-button pure-input-1 pure-button-primary" type="submit" value="Sign Up for Goali Now!" name="registerSub"/>
+						<p><a id="signintext" href="#signin-form" rel="signin-form">Or Sign In Here</a></p>
+						<input type="hidden" name="next" value="{{ next|escape }}" />
+					</form>
+					<!-- Signin form-->
+					<form class="pure-form pure-form-stacked" action="" method="post" id="signin-form">
+						{% csrf_token %}
+						<p>Sign In Here</p>
+						{% bootstrap_form loginform %}
+						<a href="#" target="_blank" class="modal_close"><img src="http://i1372.photobucket.com/albums/ag359/ybi2450/close-button_zpsa1665392.png" border="0" alt=" photo close-button_zpsa1665392.png"/></a>
+						<input class="pure-button pure-input-1 pure-button-primary" type="submit" value="Submit" name="loginSub"/>
+					</form>
+				</div>
+			</div>
+		<div class="mastfoot">
+			<div class="inner">
+				<ul id="nav-bottom">
 					<li><a href="#">About</a></li>
 					<li><a href="#">Help</a></li>
 					<li><a href="#">Terms</a></li>
 					<li><a href="#">Contact</a></li>
 					<li>© 2014 Goali</li>
-				  </ul>
-
-
-					</div>
-				</div>
+				</ul>
 			</div>
+		</div>
+	</div>
 
 {% endblock %}

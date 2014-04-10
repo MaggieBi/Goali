@@ -6,60 +6,89 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, render_to_response, get_object_or_404
 from django.template import Template, Context
 from django.template.loader import get_template
+from django.contrib.sessions.models import Session
+from django.contrib.auth import login, logout
 
-from forms import RegisterForm, ContactForm
+from forms import RegisterForm, LoginForm, ContactForm
 from accounts.models import User
 
 def homepage(request):
 	"""
 	Register a new user. Salt hash (use sha) and email them an activation key
 	"""
-	if request.method == 'POST':
-		form = RegisterForm(request.POST)
-		if form.is_valid():
-		#if form.is_valid() and form.clean_passwords and form.clean_username and form.clean_email:
-			#Make activation key, STILL NEED TO WRITE VIEW FOR CONFIRMATION
-			#salt = sha.new(str(random.random())).hexdigest()[:5]
-			#activation_key = sha.new(salt+new_user.username).hexdigest()
-			#key_expires = datetime.datetime.today() + datetime.timedelta(92)
-			
-			#save new user
-			new_user = form.save()
-			
-			#send email
-			#email_subject = 'Your Goali Account Confirmation'
-			#email_body = "Hello, %s! Thank you for signing up for a Goali account!\nTo activate your account, click this link within 48 \hours:\n\nhttp://example.com/accounts/confirm/%s" % (new_user.username,new_profile.activation_key)
-			#send_mail(email_subject,email_body,'admin@goali.net',[new_user.email])
-			
-			return HttpResponseRedirect("Registration Works!")
+	if request.user.is_authenticated():
+		return HttpResponseRedirect('/%s/'%request.user.username)
 	else:
-		form = RegisterForm()
-	return render(request, "homepage.html", { 'form': form,})
+		if request.method == 'POST':
+			if 'registerSub' in request.POST:
+				registerform = RegisterForm(request.POST)
+				loginform = LoginForm()
+				if registerform.is_valid():
+					#Make activation key, STILL NEED TO WRITE VIEW FOR CONFIRMATION
+					#salt = sha.new(str(random.random())).hexdigest()[:5]
+					#activation_key = sha.new(salt+new_user.username).hexdigest()
+					#key_expires = datetime.datetime.today() + datetime.timedelta(92)
+					
+					#save new user
+					new_user = registerform.save()
 
-def login(request):
-	if request.method != 'POST':
-		#test for cookies
-		if request.session.test_cookie_worked():
-			request.session.delete_test_cookie()
-			return
-		raise Http404('Only POSTs are allowed')
-	try:
-		username = request.POST.get('username', '')
-		password = request.POST.get('password', '')
-		user = auth.authenticate(username=username, password=password)
-		#if user is not None and user.is_active:
-		if user is not None:
-			auth.login(request, user)
-			request.sessions['member_id'] = m.id
-			return HttpResponseRedirect('/you-are-logged-in/')
-	except Member.DoesNotExist:
-		return HttpResponse("Your username and password didn't match.")
+					#send email
+					#email_subject = 'Your Goali Account Confirmation'
+					#email_body = "Hello, %s! Thank you for signing up for a Goali account!\nTo activate your account, click this link within 48 \hours:\n\nhttp://example.com/accounts/confirm/%s" % (new_user.username,new_profile.activation_key)
+					#send_mail(email_subject,email_body,'admin@goali.net',[new_user.email])
+					
+					return HttpResponseRedirect('/%s/'%request.user.username)
+			elif 'loginSub' in request.POST:
+				try:
+					loginform = LoginForm(request.POST)
+					registerform = RegisterForm()
+					if loginform.is_valid():
+						username = request.POST.get('username', '')
+						password = request.POST.get('password', '')
+						if not "@" in username:
+							user = auth.authenticate(username=username, password=password)
+							#if user is not None and user.is_active:
+							if user is not None:
+								if user.is_active:
+									auth.login(request, user)
+	#								request.sessions['member_id'] = m.id
+									return HttpResponseRedirect('/%s/'%request.user.username)
+								else:
+									return HttpResponseRedirect('your account is not active, please contact the site administrator')
+							else:
+								HttpResponse("your username and password are incorrect")
+						else:
+							acct = loginform.get_user(username)
+							user = auth.authenticate(username=acct, password=password)
+							if user is not None:
+								if user.is_active:
+									auth.login(request, user)
+	#								request.sessions['member_id'] = m.id
+									return HttpResponseRedirect('/%s/'%request.user.username)
+								else:
+									return HttpResponseRedirect('your account is not active, please contact the site administrator')
+							else:
+								HttpResponse("your username and password are incorrect")	
+				except User.DoesNotExist:
+					return HttpResponse("Your username and password didn't match.")
+		else:
+			registerform = RegisterForm()
+			loginform = LoginForm()
+		return render(request, "homepage.html", { 'registerform': registerform, 'loginform': loginform } )
 
+def login_new(request):
+	"""
+	Login as a new user. Still needs to be finished.
+	"""
+	return HttpResponseRedirect("/")
 
 def logout(request):
+	"""
+	Logout
+	"""
 	auth.logout(request)
-	return HttpResponse("You're logged out.")
-
+	return HttpResponseRedirect("/")
+	
 #contact web owner
 def contact(request):
 	if request.method == 'POST':
