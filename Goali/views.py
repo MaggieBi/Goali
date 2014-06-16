@@ -97,6 +97,10 @@ def logout(request):
 	auth.logout(request)
 	return HttpResponseRedirect("/")
 
+def about(request):
+
+	return render(request, 'about.html')
+
 #contact web owner
 def contact(request):
 	if request.method == 'POST':

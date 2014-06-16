@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from Goali.views import homepage, login_new, logout
+from Goali.views import homepage, login_new, logout, about
 from accounts.views import myprofile, osgoals, test_view
 from django.contrib import admin
 from django.conf import settings
@@ -11,6 +11,9 @@ urlpatterns = patterns('',
 	
 	#Test link
 	url(r'^test/$', test_view),
+
+	#About page link
+	url(r'^about/$', about, name='about'),
 	
 	#login / logout
 	url(r'^login_new/', login_new, name='login_new'),

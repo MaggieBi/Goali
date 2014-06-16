@@ -39,6 +39,7 @@ a{
 	display:block;
 	width: 14px;
 	height: 14px;
+	cursor: pointer;
 }
 
 .modal_close img{
