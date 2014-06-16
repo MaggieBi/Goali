@@ -1,3 +1,10 @@
-.jumbotron{
-	margin-top: 50px;
+#aboutwrapper{
+	height: 20%;
+	background-color: #ddd;
 }
+
+#aboutwrapper .container{
+	font-size: 5em;
+}
+
+
